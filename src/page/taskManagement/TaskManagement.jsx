@@ -10,7 +10,8 @@ const TaskManagement = () => {
   const { task } = useSelector((state) => state);
   console.log("task: ", task);
   const [sortOrder, setSortOrder] = useState("newest");
-  const [statusFilter, setStatusFilter] = useState("complete");
+  const [statusFilter, setStatusFilter] = useState("all");
+  console.log("statusFilter: ", statusFilter);
 
   const handleDelete = (value) => {
     dispatch(deleteTask(value.id));
@@ -25,12 +26,12 @@ const TaskManagement = () => {
   });
 
   // Filter tasks
-  //   if (statusFilter === "complete") {
-  //     console.log('statusFilter: ~~', statusFilter);
-  //     sortedTasks = sortedTasks.filter((item) => item.status === true);
-  //   } else if (statusFilter === "incomplete") {
-  //     sortedTasks = sortedTasks.filter((item) => item.status === false);
-  // }
+  if (statusFilter === "complete") {
+    console.log("statusFilter: ~~", statusFilter);
+    sortedTasks = sortedTasks.filter((item) => item.status === "complete");
+  } else if (statusFilter === "incomplete") {
+    sortedTasks = sortedTasks.filter((item) => item.status === "inComplete");
+  }
 
   return (
     <div>
@@ -52,6 +53,7 @@ const TaskManagement = () => {
             onChange={(e) => setStatusFilter(e.target.value)}
             style={{ width: "180px" }}
           >
+            <option value="all">All</option>
             <option value="complete">Complete</option>
             <option value="incomplete">Incomplete</option>
           </Form.Select>
@@ -71,6 +73,7 @@ const TaskManagement = () => {
               <th>action</th>
             </tr>
           </thead>
+          {sortedTasks.length == 0 && <p>Empty list</p>}
           <tbody>
             {sortedTasks.map((item, index) => {
               return (
